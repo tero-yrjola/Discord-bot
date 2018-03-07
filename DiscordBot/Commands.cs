@@ -17,22 +17,24 @@ public class NoArgs : ModuleBase
 [Alias("ksp", "kps")]
 public class RpsModule : ModuleBase
 {
+    private string winLoseTie = "";
     [Command("rock")]
-    [Alias("kivi")]
+    [Alias("kivi", "k", "r")]
     public async Task RpsRock()
     {
+        
         await ReplyAsync(RPS.Play(0));
     }
 
     [Command("paper")]
-    [Alias("paperi")]
+    [Alias("paperi", "p")]
     public async Task RpsPaper()
     {
         await ReplyAsync(RPS.Play(1));
     }
 
     [Command("scissors")]
-    [Alias("scissors", "sakset")]
+    [Alias("scissors", "sakset", "s")]
     public async Task RpsScissors()
     {
         await ReplyAsync(RPS.Play(2));
