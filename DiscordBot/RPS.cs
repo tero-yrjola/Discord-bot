@@ -17,7 +17,7 @@ public static class RPS
     /// [2] is bots rps choice in lowercase string</returns>
     public static string Play(int playerChoice)
     {
-        int myChoice = Util.Rng(2);
+        int myChoice = Util.Rng(3);
         string[] rpsData =
             {"",
             ((Choice)playerChoice).ToString(),
@@ -55,11 +55,11 @@ public static class RPS
 
         switch (RPSResults[0])
         {
-            case "tie": replyString = String.Format(Resources.GetNeutralRpsPhrase(), new[] { RPSResults[0], RPSResults[1], RPSResults[2] });
+            case "tie": replyString = string.Format(Resources.GetNeutralRpsPhrase(), new[] { RPSResults[0], RPSResults[1], RPSResults[2] });
                 break;
-            case "loss": replyString = String.Format(Resources.GetBotLoseRpsPhrase(), new[] { RPSResults[0], RPSResults[1], RPSResults[2] });
+            case "loss": replyString = string.Format(Resources.GetBotLoseRpsPhrase(), new[] { RPSResults[0], RPSResults[1], RPSResults[2] });
                 break;
-            case "win": replyString = String.Format(Resources.GetBotWinRpsPhrase(), new[] { RPSResults[0], RPSResults[1], RPSResults[2] });
+            case "win": replyString = string.Format(Resources.GetBotWinRpsPhrase(), new[] { RPSResults[0], RPSResults[1], RPSResults[2] });
                 break;
             default:
                 replyString = $"Something went wrong with these: {RPSResults[0]}, {RPSResults[1]}, {RPSResults[2]}";

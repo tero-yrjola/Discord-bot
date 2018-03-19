@@ -80,7 +80,7 @@ public static class Resources
         string  returnString = "";
         foreach (string[] phrases in values)
         {
-            returnString += phrases[Util.Rng(phrases.Length - 1)];
+            returnString += phrases[Util.Rng(phrases.Length)];
         }
         return returnString;
     }

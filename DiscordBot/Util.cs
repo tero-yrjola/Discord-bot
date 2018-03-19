@@ -11,12 +11,12 @@ public static class Util
     ///<summary>Return a random number from 0-max (both inclusive)</summary>
     public static int Rng(int max)
     {
-        return random.Next(max +1);
+        return random.Next(max);
     }
     ///<summary>Return a random number from lowerLimit-upperLimit (both inclusive)</summary>
     public static int Rng(int lowerLimit, int upperLimit)
     {
-        return random.Next(lowerLimit, upperLimit+1);
+        return random.Next(lowerLimit, upperLimit);
     }
 }
 
