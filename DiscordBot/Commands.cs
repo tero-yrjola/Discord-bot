@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 using Discord.Commands;
 using System.Threading.Tasks;
+using DiscordBot;
 using Google.Apis.Services;
 using Google.Apis.YouTube.v3;
+using Google.Apis.YouTube.v3.Data;
 
 public class NoArgs : ModuleBase
 {
@@ -16,68 +19,17 @@ public class NoArgs : ModuleBase
 
 public class YoutubeModule : ModuleBase
 {
-    //TODO: Fix (refactor) this long long long thing 
     [Command("ytc"), Summary("Returns a random YouTube-comment")]
     public async Task GetYoutubeComment([Remainder, Summary("Youtube-channel to search the random comment from")] string searchString)
     {
-        YouTubeService service = new YouTubeService(new BaseClientService.Initializer()
+        try
         {
-            ApiKey = File.ReadAllLines("token.txt")[1],
-            ApplicationName = GetType().ToString()
-        });
-
-        bool includeVideo = searchString.Contains("-v");
-        if (includeVideo) searchString = searchString.Replace("-v", "");
-        var youtubeSearchRequest = service.Search.List("snippet");
-        youtubeSearchRequest.Q = searchString;
-        youtubeSearchRequest.MaxResults = 50;
-        var searchResponse = youtubeSearchRequest.Execute();
-        var videoId = "";
-        if (searchString.Length > 2)
-        {
-            foreach (var searchResponseItem in searchResponse.Items)
-            {
-                if (searchResponseItem.Id.Kind == "youtube#video")
-                {
-                    videoId = searchResponseItem.Id.VideoId;
-                    break;
-                }
-            }
+            await ReplyAsync(YouTube.FetchCommentAsync(searchString).Result);
         }
-        else await ReplyAsync("I need longer paremeters, bro.");
-
-        var commentThreadsRequest = service.CommentThreads.List("snippet");
-        commentThreadsRequest.VideoId = videoId;
-        commentThreadsRequest.MaxResults = 100;
-        var commentResponse = commentThreadsRequest.Execute();
-        if (commentResponse.Items.Count < 1)
-            if (includeVideo)
-                await ReplyAsync("This video had no comments: https://www.youtube.com/watch?v=" + videoId);
-            else
-                await ReplyAsync("The video had no comments!");
-                var commentIndex = Util.Rng(commentResponse.Items.Count);
-        var commentSnippet = commentResponse.Items[commentIndex].Snippet.TopLevelComment.Snippet;
-        var returnString = commentSnippet.TextOriginal + "\n-" + commentSnippet.AuthorDisplayName;
-        if (includeVideo) returnString += "\nhttps://www.youtube.com/watch?v=" + videoId;
-        await ReplyAsync(returnString);
-    }
-
-    [Command("ytc"), Summary("Returns a random YouTube-comment")]
-    public async Task GetYoutubeComment()
-    {
-        YouTubeService service = new YouTubeService(new BaseClientService.Initializer()
+        catch (Exception e)
         {
-            ApiKey = "AIzaSyAZFsp2Et_H4tu5xMEiMKL_o8OF9JxVgHs",
-            ApplicationName = GetType().ToString()
-        });
-        var commentThreadsRequest = service.CommentThreads.List("snippet");
-        commentThreadsRequest.VideoId = "wQadGczDj9E";
-        commentThreadsRequest.MaxResults = 100;
-        var commentResponse = commentThreadsRequest.Execute();
-        var commentIndex = Util.Rng(commentResponse.Items.Count);
-        var topCommentSnippet = commentResponse.Items[commentIndex].Snippet.TopLevelComment.Snippet;
-        await ReplyAsync(topCommentSnippet.TextOriginal + "\n-" + topCommentSnippet.AuthorDisplayName
-            + "\nhttps://www.youtube.com/watch?v=" + topCommentSnippet.VideoId);
+            await ReplyAsync(e.InnerException?.Message ?? "Failed fetching comments!");
+        }
     }
 }
 
