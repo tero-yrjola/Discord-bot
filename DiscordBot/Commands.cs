@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using System.Runtime.Remoting.Contexts;
 using Discord.Commands;
 using System.Threading.Tasks;
+using Discord;
 using DiscordBot;
 using Google.Apis.Services;
 using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
 
-public class NoArgs : ModuleBase
+public class EchoModule : ModuleBase
 {
-    [Command("say"), Summary("Echoes a message.")]
+    [Command("say"), Summary("Deletes the users message and says the message as BoomBot")]
     public async Task Say([Remainder, Summary("The text to echo")] string echo)
     {
+        await Context.Message.DeleteAsync();
         await ReplyAsync(echo);
     }
 }
@@ -24,7 +27,7 @@ public class YoutubeModule : ModuleBase
     {
         try
         {
-            await ReplyAsync(YouTube.FetchCommentAsync(searchString).Result);
+            await ReplyAsync(YouTube.FetchComment(searchString));
         }
         catch (Exception e)
         {

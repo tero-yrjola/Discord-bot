@@ -10,7 +10,7 @@ namespace DiscordBot
 {
     public class YouTube
     {
-        public static async Task<string> FetchCommentAsync(string searchString)
+        public static string FetchComment(string searchString)
         {
             var service = new YouTubeService(new BaseClientService.Initializer
             {
